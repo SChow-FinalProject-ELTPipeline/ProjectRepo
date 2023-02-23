@@ -2046,7 +2046,8 @@ FMLD,EARNCOMP,7,Others
 MEMD,EDUCA,7,"Bachelor's degree (BA, AB, BS, ect.)"
 EXPD,EXPNSQDY,7,Diary Day 7
 EXPD,EXPNWKDY,7,Saturday
-FMLD,FAM_TYPE,7,"One parent, female, own children, at least one age < 18"
+FMLD,FAM_TYPE,7,"One parent, female, own children, at least one age < 18
+"
 MEMD,PAYPERD,7,Other
 MEMD,RC_DK,7,Don't know
 MEMD,HISPANIC,7,Central or South American
@@ -16764,7 +16765,8 @@ FMLI,EARNCOMP,7,Others
 FMLI,EDUC_REF,7,Never attended school
 FMLI,EDUCA2,7,Never attended school
 FMLI,EXBLOCK,7,Concrete block
-FMLI,FAM_TYPE,7,"One parent, female, own children, at least one age < 18"
+FMLI,FAM_TYPE,7,"One parent, female, own children, at least one age < 18
+"
 FMLI,HEATFUEL,7,Solar
 FMLI,INCLASS,7,Incomplete reporters of income
 FMLI,PARK_FAC,7,Common garage
