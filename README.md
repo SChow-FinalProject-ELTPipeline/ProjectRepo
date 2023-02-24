@@ -9,20 +9,20 @@ The purpose of this project is to present to code a basic ELT pipeline implement
 ## Design Document & Presentation
 * [Design Document ](https://docs.google.com/document/d/1fSQvwDQKXq48kGfZs4CZgP_DDEtUIvGiAxJxwymWQPA/edit?usp=sharing)
 * [Presentation slides ](https://docs.google.com/presentation/d/1nSNaFQdMmkmSau_M2z2EZJFIgPv_qZwLtgnsIeeTwh0/edit?usp=sharing)
-* If links not accessible, both files are also available on this GitHub page
+If links not accessible, both files are also available on this GitHub page under "Prensentation" and "Design Document" folders.
 
 
 ## Oveview of Repository Content
-1. schow-elt-pipeline.py
+1. ConnieChow-elt-pipeline-Feb23.py<br>
 This is the ELT pipeline application.  Just follow the setup requirements below and run the file.
 
-2. USCPI.csv
+2. USCPI.csv<br>
 This is the CPI data taken from Kaggle.  The application directly accesses this CSV file from this GitHub page.
 
-3. gdp.csv
+3. gdp.csv<br>
 This is the GDP data taken from Kaggle.  The application directly accesses this CSV file from this GitHub page.
 
-4. README
+4. README<br>
 You are reading the README.  It contains all the information you need to setup and run this pipeline.  I recommend you look at the Design Document so that you understand what is going on in the code.
 
 
