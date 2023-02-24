@@ -13,7 +13,7 @@ If links not accessible, both files are also available on this GitHub page under
 
 
 ## Oveview of Repository Content
-1. ConnieChow-elt-pipeline-Feb23.py<br>
+1. ConnieChow-elt-pipeline.py<br>
 This is the ELT pipeline application.  Just follow the setup requirements below and run the file.
 
 2. USCPI.csv<br>
@@ -36,10 +36,10 @@ You are reading the README.  It contains all the information you need to setup a
 
 
 ## How To Deploy This Pipeline
-1. Download from GitHub and then open up this file "ConnieChow-elt-pipeline-Feb23.py" in your IDE
+1. Download from GitHub and then open up this file "ConnieChow-elt-pipeline.py" in your IDE
 2. At line 52 and line 53, enter your username and password to your local MySQL database INSIDE of the quotes.
-3. At line 49, ensure that the database name is not already taken in your MySQL database.  If that name already exists, then change the name to something that does not exist already in your database.
-3. Run the file "ConnieChow-elt-pipeline-Feb23.py"
+3. At line 49 and line 50, ensure that the database name is not already taken in your MySQL database.  If that name already exists, then change the name to something that does not exist already in your database.
+3. Run the file "ConnieChow-elt-pipeline.py"
 
 
 ## How to Monitor This Pipeline
