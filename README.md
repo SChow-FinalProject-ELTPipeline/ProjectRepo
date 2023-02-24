@@ -8,7 +8,7 @@ The purpose of this project is to present to code a basic ELT pipeline implement
 
 ## Design Document & Presentation
 * [Design Document ](https://docs.google.com/document/d/1fSQvwDQKXq48kGfZs4CZgP_DDEtUIvGiAxJxwymWQPA/edit?usp=sharing)
-* [Presentation slides ](https://docs.google.com/presentation/d/1nSNaFQdMmkmSau_M2z2EZJFIgPv_qZwLtgnsIeeTwh0/edit?usp=sharing)
+* [Presentation slides ](https://docs.google.com/presentation/d/1nSNaFQdMmkmSau_M2z2EZJFIgPv_qZwLtgnsIeeTwh0/edit?usp=sharing)<br>
 If links not accessible, both files are also available on this GitHub page under "Prensentation" and "Design Document" folders.
 
 
