@@ -46,8 +46,8 @@ logging.basicConfig(filename='etl-pipeline.log', encoding='utf-8', filemode='w',
 # Set the log message format
 logging.basicConfig(format='%(levelname)s: %(asctime)s %(message)s', level=logging.DEBUG)
 
-use_database = "USE ConsumerExpenditures17;"
-dbName = "ConsumerExpenditures17"
+use_database = "USE ConsumerExpenditures20;"
+dbName = "ConsumerExpenditures20"
 
 ##########################################################################################################
 # Extract Helper Method: extract data from Data Source 1 - Bureau of Labor Statistics Consumer Expenditures
@@ -94,10 +94,10 @@ def extract_bls_consumer_expenditures():
             with localEngine.connect() as conn_local:
 
                 # create ConsumerExpenditures database if not exists else start copying over tables
-                #database = 'ConsumerExpenditures10'
                 result = conn_local.execute(text("CREATE DATABASE IF NOT EXISTS {0} ".format(dbName)))
                 result = conn_local.execute(text(use_database))
 
+                start1 = time.time()
                 result_table1 = conn_local.execute(text("""
                 CREATE TABLE IF NOT EXISTS EXPENDITURES (EXPENDITURE_ID varchar(11) PRIMARY KEY NOT NULL,
                     HOUSEHOLD_ID VARCHAR(10) NOT NULL,
@@ -109,7 +109,10 @@ def extract_bls_consumer_expenditures():
                     IS_TRAINING INT(255) NOT NULL,
                     INDEX NAME(HOUSEHOLD_ID))
                 """))
+                end1 = time.time() - start1
+                logger.info("Writing household members table to CSV file : {} seconds".format(end1))
 
+                start1 = time.time()
                 result_table2 = conn_local.execute(text("""
                                 CREATE TABLE IF NOT EXISTS HOUSEHOLDS (HOUSEHOLD_ID varchar(10) PRIMARY KEY NOT NULL,
                                     YEAR int(11) NOT NULL,
@@ -122,7 +125,10 @@ def extract_bls_consumer_expenditures():
                                     INCOME_RANK_MEAN double NOT NULL,
                                     AGE_REF int(11))
                                 """))
+                end1 = time.time() - start1
+                logger.info("Writing household members table to CSV file : {} seconds".format(end1))
 
+                start1 = time.time()
                 result_table3 = conn_local.execute(text("""
                                 CREATE TABLE IF NOT EXISTS HOUSEHOLD_MEMBERS (HOUSEHOLD_ID varchar(10) NOT NULL,
                                     YEAR INT(11) NOT NULL,
@@ -132,13 +138,16 @@ def extract_bls_consumer_expenditures():
                                     WORK_STATUS VARCHAR(2) DEFAULT NULL,
                                     INDEX NAME(HOUSEHOLD_ID))
                 """))
+                end1 = time.time() - start1
+                logger.info("Writing household members table to CSV file : {} seconds".format(end1))
 
 
                 # Load dataframe into datawarehouse - this is the LOAD portion of ELT
+                logger.info('Start Loading Consumer Expenditures Data Into Database Tables')
                 load_ce_expenditures(df_expenditures, 'EXPENDITURES')
                 load_ce_households(df_households, 'HOUSEHOLDS')
                 load_ce_household_members(df_household_members, 'HOUSEHOLD_MEMBERS')
-
+                logger.info('Completed Loading Consumer Expenditures Data Into Database Tables')
 
         except exc.SQLAlchemyError as e:
             print(type(e))
@@ -162,6 +171,7 @@ def extract_bls_consumer_expenditures():
 def extract_gdp():
 
     logger.info('Start GDP Database Extract Session')
+    start1 = time.time()
 
     try:
         # Read tables from database and copy over to local MySQL
@@ -185,46 +195,60 @@ def extract_gdp():
                                 INFLATION_RATE double not null)
                             """))
 
+            url = 'https://raw.githubusercontent.com/SChow-FinalProject-ELTPipeline/ProjectRepo/main/Datasets/gdp.csv'
+            df_gdp = pd.read_csv(url, sep=',', header=0, na_values='nan')
 
-            with open('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/gdp.csv', 'r') as f:
-                reader = csv.reader(f)
-                next(reader)  # Skip the header row
+            for i,row in df_gdp.iterrows():
 
-                for row in reader:
-                    gdp_year = row[0]
-                    if gdp_year == '0':
-                        gdp_year = '0'
-                    month = row[1]
-                    if month == '0':
-                        month = '0'
-                    day = row[2]
-                    ff_target_rate = row[3]
-                    if ff_target_rate == "":
-                        ff_target_rate = '0'
-                    ff_upper_target = row[4]
-                    if ff_upper_target == "":
-                        ff_upper_target = '0'
-                    ff_lower_target = row[5]
-                    if ff_lower_target == "":
-                        ff_lower_target = '0'
-                    ff_rate = row[6]
-                    if ff_rate == "":
-                        ff_rate = '0'
-                    real_gdp = row[7]
-                    if real_gdp == "":
-                        real_gdp = '0'
-                    unemp_rate = row[8]
-                    if unemp_rate == "":
-                        unemp_rate = '0'
-                    inflation_rate = row[9]
-                    if inflation_rate == "":
-                        inflation_rate = '0'
-                    query = 'INSERT INTO GDP (GDP_YEAR, MONTH, DAY,' + 'FEDERAL_FUNDS_TARGET_RATE,' + 'FEDERAL_FUNDS_UPPER_TARGET,' + 'FEDERAL_FUNDS_LOWER_TARGET,'+ 'EFFECTIVE_FEDERAL_FUNDS_RATE,' + 'REAL_GDP,' + 'UNEMPLOYMENT_RATE,' + 'INFLATION_RATE) VALUES (' + gdp_year + "," + month + "," + day + "," + ff_target_rate + "," + ff_upper_target + "," + ff_lower_target + "," + ff_rate + "," + real_gdp + "," + unemp_rate + "," + inflation_rate + ')'
-                    result = conn_local.execute(text(query))
-                    print("INSERT query result: ")
-                    print(result)
+                #next(reader)  # Skip the header row
 
-                conn_local.commit()
+                #for row in reader:
+                gdp_year = str(row[0])
+                gdp_year = gdp_year[:gdp_year.find('.')]
+
+                month = str(row[1])
+                month = month[:month.find('.')]
+
+                day = str(row[2])
+                day = day[:day.find('.')]
+
+                ff_target_rate = str(row[3])
+                if ff_target_rate == "nan":
+                    ff_target_rate = '0'
+
+                ff_upper_target = str(row[4])
+                if ff_upper_target == "nan":
+                    ff_upper_target = '0'
+
+                ff_lower_target = str(row[5])
+                if ff_lower_target == "nan":
+                    ff_lower_target = '0'
+
+                ff_rate = str(row[6])
+                if ff_rate == "nan":
+                    ff_rate = '0'
+
+                real_gdp = str(row[7])
+                if real_gdp == "nan":
+                    real_gdp = '0'
+
+                unemp_rate = str(row[8])
+                if unemp_rate == "nan":
+                    unemp_rate = '0'
+
+                inflation_rate = str(row[9])
+                if inflation_rate == "nan":
+                    inflation_rate = '0'
+
+                query = 'INSERT INTO GDP (GDP_YEAR, MONTH, DAY,' + 'FEDERAL_FUNDS_TARGET_RATE,' + 'FEDERAL_FUNDS_UPPER_TARGET,' + 'FEDERAL_FUNDS_LOWER_TARGET,'+ 'EFFECTIVE_FEDERAL_FUNDS_RATE,' + 'REAL_GDP,' + 'UNEMPLOYMENT_RATE,' + 'INFLATION_RATE) VALUES (' + gdp_year + "," + month + "," + day + "," + ff_target_rate + "," + ff_upper_target + "," + ff_lower_target + "," + ff_rate + "," + real_gdp + "," + unemp_rate + "," + inflation_rate + ')'
+                result = conn_local.execute(text(query))
+                print("INSERT query result: ")
+                print(result)
+
+            conn_local.commit()
+
+        end1 = time.time() - start1
+        logger.info("Extracting GDP and Writing to Database Table took: {} seconds".format(end1))
 
     except:
        # printing stack trace
@@ -235,7 +259,9 @@ def extract_gdp():
 # Helper Extract Method - Read from Data Source 3
 ##########################################################################################################
 def extract_cpi():
+
     logger.info('Start CPI Database Extract Session')
+    start1 = time.time()
 
     try:
         # Connect to local database
@@ -251,17 +277,21 @@ def extract_cpi():
                                    CPI DOUBLE NOT NULL)
                                """))
 
-            with open('C:/ProgramData/MySQL/MySQL Server 8.0/Uploads/USCPI.csv', 'r') as f:
-                reader = csv.reader(f)
-                next(reader)  # Skip the header row
+            url = 'https://raw.githubusercontent.com/SChow-FinalProject-ELTPipeline/ProjectRepo/main/Datasets/USCPI.csv'
+            df_gdp = pd.read_csv(url, sep=',', header=0, na_values='nan')
 
-                for row in reader:
-                    yearmon = row[0]
-                    cpi = row[1]
-                    query = 'INSERT INTO CPI (YEARMON, CPI) VALUES (STR_TO_DATE(\'' + yearmon + "\', '%m-%d-%Y')," + cpi + ')'
-                    result = conn_local.execute(text(query))
+            for i, row in df_gdp.iterrows():
 
-                conn_local.commit()
+                yearmon = row[0]
+                cpi = str(row[1])
+
+                query = 'INSERT INTO CPI (YEARMON, CPI) VALUES (STR_TO_DATE(\'' + yearmon + "\', '%m-%d-%Y')," + cpi + ')'
+                result = conn_local.execute(text(query))
+
+            conn_local.commit()
+
+        end1 = time.time() - start1
+        logger.info("Extracting CPI and Writing to Database Table took: {} seconds".format(end1))
 
     except:
         # printing stack trace
@@ -415,7 +445,7 @@ def transformation():
             # with each row being one Consumer Expenditure Purchase
             # This view will be made available as the business warehouse interface
             # for Applications like Tableau users to create dashboards
-            query = text("""create view `BUSINESS_WAREHOUSE` as select e.expenditure_id, e.household_id, e.year, e.month, e.product_code, 
+            query = text("""create or replace view `BUSINESS_WAREHOUSE` as select e.expenditure_id, e.household_id, e.year, e.month, e.product_code, 
                             e.cost, e.gift, e.is_training, 
                             hm.marital, hm.sex, hm.age, hm.work_status, h.income_rank, 
                             h.income_rank_1, h.income_rank_2, h.income_rank_3, h.income_rank_4, 
@@ -437,6 +467,7 @@ def transformation():
 
 
             # https://pythonspeed.com/articles/pandas-sql-chunking/
+            # https://www.confessionsofadataguy.com/pandas-dataframe-to_sql-how-you-should-configure-it-to-not-be-that-guy/
             # https://stackoverflow.com/questions/69711599/pandas-read-sql-from-ms-sql-gets-stuck-for-queries-with-275-chars-in-linux
             # Takes too long to execute this query: df_final_table = pd.read_sql(query, conn_local)
             # So we have to do it in chunks to load into a pandas dataframe and then write that to the loading_table
@@ -499,15 +530,15 @@ def load_ce_expenditures(df_datasource_table, tbl):
             cols = "`,`".join([str(i) for i in df_datasource_table.columns.tolist()])
             for i, row in df_datasource_table.iterrows():
                 expenditure_id = str(row[0])
-                expenditure_id = expenditure_id[:expenditure_id.find('.')]
+                #expenditure_id = expenditure_id[:expenditure_id.find('.')]
                 household_id = str(row[1])
-                household_id = household_id[:household_id.find('.')]
+                #household_id = household_id[:household_id.find('.')]
                 year = str(row[2])
                 year = year[0:4]
                 month = str(row[3])
-                month = month[:month.find('.')]
+                #month = month[:month.find('.')]
                 product_code = str(row[4])
-                product_code = product_code[:product_code.find('.')]
+                #product_code = product_code[:product_code.find('.')]
                 cost = str(row[5])
                 gift = str(row[6])
                 is_training = str(row[7])
@@ -531,16 +562,10 @@ def load_ce_expenditures(df_datasource_table, tbl):
 def load_ce_households(df_datasource_table, tbl):
 
     logger.info('Start Load Session - Consumer Expenditures - Households Table')
-    #logger.info("Loading dataframe %s into table %s", df_datasource_table.name, tbl.name)
 
     try:
         # Connect to local MySQL database
         start1 = time.time()
-        #conn = mysql.connector.connect(
-        #    host="localhost",
-        #    user="root",
-        #    password="1234",
-        #    database="ConsumerExpenditures10")
         conn = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -565,7 +590,7 @@ def load_ce_households(df_datasource_table, tbl):
                 household_id = str(row[0])
                 household_id = household_id[:household_id.find('.')]
                 year = str(row[1])
-                year = year[:year.find('.')]
+                #year = year[:year.find('.')]
                 income_rank = str(row[2])
                 income_rank1 = str(row[3])
                 income_rank2 = str(row[4])
@@ -600,11 +625,6 @@ def load_ce_household_members(df_datasource_table, tbl):
     try:
         # Connect to local MySQL database
         start1 = time.time()
-        #conn = mysql.connector.connect(
-        #    host="localhost",
-        #    user="root",
-        #    password="1234",
-        #    database="ConsumerExpenditures10")
         conn = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -627,9 +647,9 @@ def load_ce_household_members(df_datasource_table, tbl):
             cols = "`,`".join([str(i) for i in df_datasource_table.columns.tolist()])
             for i, row in df_datasource_table.iterrows():
                 household_id = str(row[0])
-                household_id = household_id[:household_id.find('.')]
+                #household_id = household_id[:household_id.find('.')]
                 year = str(row[1])
-                year = year[:year.find('.')]
+                #year = year[:year.find('.')]
                 marital = str(row[2])
                 sex = str(row[3])
                 age = str(row[4])
@@ -638,7 +658,11 @@ def load_ce_household_members(df_datasource_table, tbl):
                 if work_status == 'nan':
                     work_status = '0'
 
+                if work_status == 'None':
+                    work_status = '0'
+
                 sql = "INSERT IGNORE INTO `HOUSEHOLD_MEMBERS`(`" + cols + "`) VALUES(" + household_id + "," + year + "," + marital + "," + sex + "," + age + "," + work_status + ")"
+                logger.info(sql)
                 query_result = cursor.execute(sql)
                 logger.info("INSERT IGNORE INTO HOUSEHOLD_MEMBERS query result: ".format(query_result))
 
