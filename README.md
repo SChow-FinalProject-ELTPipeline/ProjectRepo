@@ -47,6 +47,11 @@ You are reading the README.  It contains all the information you need to setup a
 2. The log messages are also printed to the console at runtime
 
 
+## How to Access The Data Warehouse Output Of This Pipeline
+1. Connect or access your local MySQL server and the database that was created with this pipeline
+2. You can access the repository through the "business_warehouse" SQL View
+
+
 
 ### Technologies
 * Python (current version)
