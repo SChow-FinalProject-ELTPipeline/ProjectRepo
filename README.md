@@ -36,14 +36,14 @@ You are reading the README.  It contains all the information you need to setup a
 
 
 ## How To Deploy This Pipeline
-1. Open up the file "schow-elt-pipeline.py"
-2. At line 49, enter your username and password to your local MySQL database
-3. At line 51, ensure that the database name is not already taken in your MySQL database.  If that name already exists, then change the name to something that does not exist already in your database.
-3. Run the file "schow-elt-pipeline.py"
+1. Download from GitHub and then open up this file "ConnieChow-elt-pipeline-Feb23.py" in your IDE
+2. At line 52 and line 53, enter your username and password to your local MySQL database INSIDE of the quotes.
+3. At line 49, ensure that the database name is not already taken in your MySQL database.  If that name already exists, then change the name to something that does not exist already in your database.
+3. Run the file "ConnieChow-elt-pipeline-Feb23.py"
 
 
 ## How to Monitor This Pipeline
-1. The log messages are written to the etl-pipeline.log file
+1. The log messages are written to the etl-pipeline.log file.  This file will be available in the same directory that you run your python program from.
 2. The log messages are also printed to the console at runtime
 
 
