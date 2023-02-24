@@ -33,12 +33,6 @@ You are reading the README.  It contains all the information you need to setup a
 4. Download and Install PyCharm (this is recommended but you can also run python from the command line)
 5. Ensure that your environment path and variables are set for Python
 6. Ensure that all python libraries listed above are installed in your IDE of choice or in PyCharm
-7. Open up your my.ini belonging to you MySQL installation folders and make sure you have this in the file under [mysqld] section:
-
-secure-file-priv="C:/ProgramData/MySQL/MySQL Server 8.0/Uploads"
-
-This is the folder that files to be read into MySQL will be taken from and only have access to this folder.
-
 
 
 ## How To Deploy This Pipeline
