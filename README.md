@@ -37,8 +37,8 @@ You are reading the README.  It contains all the information you need to setup a
 
 ## How To Deploy This Pipeline
 1. Download from GitHub and then open up this file "ConnieChow-elt-pipeline-Feb24.py" in your IDE
-2. At line 52 and line 53, enter your username and password to your local MySQL database INSIDE of the quotes.
-3. At line 49 and line 50, ensure that the database name is not already taken in your MySQL database.  If that name already exists, then change the name to something that does not exist already in your database.
+2. At line 56 and line 57, enter your username and password to your local MySQL database INSIDE of the quotes.
+3. At line 59 and line 60, ensure that the database name is not already taken in your MySQL database.  If that name already exists, then change the name to something that does not exist already in your database.
 3. Run the file "ConnieChow-elt-pipeline.py"
 
 
