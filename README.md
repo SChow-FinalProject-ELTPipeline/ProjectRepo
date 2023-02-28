@@ -36,10 +36,11 @@ You are reading the README.  It contains all the information you need to setup a
 
 
 ## How To Deploy This Pipeline
-1. Download from GitHub and then open up this file "ConnieChow-elt-pipeline-Feb24.py" in your IDE
+1. Download from GitHub and then open up this file "ConnieChow-elt-pipeline-Feb25-timestamplog.py" in your IDE
+(In the demo video, the file was ""ConnieChow-elt-pipeline-Feb24.py" but please use the one designated above for Feb25)
 2. At line 56 and line 57, enter your username and password to your local MySQL database INSIDE of the quotes.
 3. At line 59 and line 60, ensure that the database name is not already taken in your MySQL database.  If that name already exists, then change the name to something that does not exist already in your database.
-3. Run the file "ConnieChow-elt-pipeline.py"
+3. Run the file "ConnieChow-elt-pipeline-Feb25-timestamplog.py".  In the demo video, I used file "ConnieChow-elt-pipeline.py" but go ahead and use the Feb25 one.
 
 
 ## How to Monitor This Pipeline
